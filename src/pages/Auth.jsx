@@ -15,7 +15,19 @@ export default function Auth(props) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.dir(e.target);
     props.setUser({ ...formData });
+
+    //! delete values of inputs
+
+    const formValues = Object.values(e.target);
+
+    formValues.forEach((form) => {
+      if (form.term) {
+        console.log("hiii");
+      }
+      form.value = "";
+    });
   };
 
   return (
