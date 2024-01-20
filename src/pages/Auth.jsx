@@ -2,6 +2,8 @@ import { useState } from "react";
 import Login from "../components/login/index";
 import SignUp from "../components/singUp.jsx/index";
 import { Button } from "@mui/material";
+import { db } from "../config/fireBaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 
 export default function Auth(props) {
   const [isLoadingMode, setIsLoadingMode] = useState(true);
@@ -13,9 +15,12 @@ export default function Auth(props) {
   const changeHandler = (e) => {
     setData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.dir(e.target);
+    //! set data fireBase
+    const colletionRef = collection(db, "users");
+    const payload = { ...formData };
+    await addDoc(colletionRef, payload);
     props.setUser({ ...formData });
 
     //! delete values of inputs

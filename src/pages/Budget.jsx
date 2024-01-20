@@ -9,11 +9,25 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../config/fireBaseConfig";
 
 export default function Budget(props) {
   const [rowData, setRowData] = useState([]);
 
   const [total, setTotal] = useState(0);
+  const addTodo = async (e) => {
+    e.preventDefault();
+
+    try {
+      const docRef = await addDoc(collection(db, "budgets"), {
+        rowData,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
   // const [isHasUser, setisHasUser] = useState(false);
 
   const handleSubmit = (e) => {
@@ -27,6 +41,7 @@ export default function Budget(props) {
         category: e.target[6].value,
       },
     ]);
+
     e.target[0].value = "";
     e.target[2].value = "";
     e.target[4].value = "";
