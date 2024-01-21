@@ -1,15 +1,16 @@
 import "./login.css";
+
 export default function Login(props) {
   return (
     <div className="form-container">
       <div className="form">
         <h1>Sign in</h1>
 
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={props.handleSignIn}>
           <label htmlFor="email">Email</label>
 
           <input
-            onChange={props.changeHandler}
+            onChange={props.handleEmailChange}
             type="email"
             id="email"
             name="email"
@@ -20,7 +21,7 @@ export default function Login(props) {
           <label htmlFor="password">Password</label>
 
           <input
-            onChange={props.changeHandler}
+            onChange={props.handlePasswordChange}
             type="password"
             id="password"
             name="password"
@@ -30,7 +31,6 @@ export default function Login(props) {
           <i className="fa fa-eye" id="eye-icon"></i>
 
           <input
-            onChange={props.changeHandler}
             type="checkbox"
             className="term"
             id="terms"

@@ -24,6 +24,7 @@ export default function Budget() {
 
   const [total, setTotal] = useState(0);
 
+  //! set budget data
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -52,6 +53,7 @@ export default function Budget() {
     e.target[4].value = "";
     e.target[6].value = "";
   };
+  //!dleleteHandle
   const handleClick = async (rowObject) => {
     //! delete from firebase
     const rowRef = doc(db, "budgets", rowObject.id);
@@ -75,6 +77,7 @@ export default function Budget() {
     });
   };
 
+  //! total
   useEffect(() => {
     const sumWithInitial = rowData.reduce(
       (accumulator, currentValue) => accumulator + Number(currentValue.amount),
@@ -84,6 +87,7 @@ export default function Budget() {
     setTotal(sumWithInitial);
   }, [rowData]);
 
+  //! fecth users to check how much users connected
   useEffect(() => {
     //! get data
     try {

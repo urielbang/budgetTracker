@@ -4,19 +4,10 @@ export default function SignUp(props) {
     <div className="form-container">
       <div className="form">
         <h1>Sign Up</h1>
-        <form onSubmit={props.handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input
-            onChange={props.changeHandler}
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Abbas Uddin"
-            required
-          />
+        <form onSubmit={props.handleSignUp}>
           <label htmlFor="email">Email</label>
           <input
-            onChange={props.changeHandler}
+            onChange={props.handleEmailChange}
             type="email"
             id="email"
             name="email"
@@ -25,7 +16,7 @@ export default function SignUp(props) {
           />
           <label htmlFor="password">Password</label>
           <input
-            onChange={props.changeHandler}
+            onChange={props.handlePasswordChange}
             type="password"
             id="password"
             name="password"

@@ -9,7 +9,6 @@ import { db } from "./config/fireBaseConfig.js";
 import { collection, onSnapshot } from "firebase/firestore";
 
 function App() {
-  console.log(db);
   const [name, setName] = useState("");
   const [user, setUser] = useState(null);
 

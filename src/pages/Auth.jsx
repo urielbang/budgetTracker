@@ -2,46 +2,88 @@ import { useState } from "react";
 import Login from "../components/login/index";
 import SignUp from "../components/singUp.jsx/index";
 import { Button } from "@mui/material";
-import { db } from "../config/fireBaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { auth } from "../config/fireBaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
-export default function Auth(props) {
+export default function Auth() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoadingMode, setIsLoadingMode] = useState(true);
-  const [formData, setData] = useState({});
 
+  //! toggle login signUp
   const handleToggle = () => {
     setIsLoadingMode(!isLoadingMode);
   };
-  const changeHandler = (e) => {
-    setData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const handleSubmit = async (e) => {
+
+  //!  sign up
+  const handleSignUp = (e) => {
     e.preventDefault();
-    //! set data fireBase
-    const colletionRef = collection(db, "users");
-    const payload = { ...formData };
-    await addDoc(colletionRef, payload);
-    props.setUser({ ...formData });
+    if (!email || !password) return;
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredentail) => {
+        const user = userCredentail.user;
+        console.log(user);
+        const formValues = Object.values(e.target);
+        e.target.terms.checked = false;
+        formValues.forEach((form) => {
+          form.value = "";
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
+  //! sign in
+  const handleSignIn = (e) => {
+    e.preventDefault();
 
-    //! delete values of inputs
+    if (!email || !password) return;
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentail) => {
+        const user = userCredentail.user;
+        console.log(user);
+        const formValues = Object.values(e.target);
+        e.target.terms.checked = false;
+        formValues.forEach((form) => {
+          form.value = "";
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
 
-    const formValues = Object.values(e.target);
-
-    formValues.forEach((form) => {
-      if (form.term) {
-        console.log("hiii");
-      }
-      form.value = "";
-    });
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   return (
     <div className="loginContainer">
-      <Button onClick={handleToggle}>Click toggle</Button>
+      <Button onClick={handleToggle}>
+        {isLoadingMode ? "login" : "Sign Up"}
+      </Button>
       {isLoadingMode ? (
-        <Login changeHandler={changeHandler} handleSubmit={handleSubmit} />
+        <Login
+          handleSignIn={handleSignIn}
+          handleEmailChange={handleEmailChange}
+          handlePasswordChange={handlePasswordChange}
+        />
       ) : (
-        <SignUp changeHandler={changeHandler} handleSubmit={handleSubmit} />
+        <SignUp
+          handleEmailChange={handleEmailChange}
+          handlePasswordChange={handlePasswordChange}
+          handleSignUp={handleSignUp}
+        />
       )}
     </div>
   );
