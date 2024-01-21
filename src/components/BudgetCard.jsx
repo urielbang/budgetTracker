@@ -10,7 +10,7 @@ export default function BudgetCard({ row, handleClick }) {
       <TableCell align="right">
         <button
           onClick={() => {
-            handleClick(row.title);
+            handleClick(row);
           }}
           className="btnDelete"
         >

@@ -9,29 +9,34 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
-import { collection, addDoc } from "firebase/firestore";
 import { db } from "../config/fireBaseConfig";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
 
-export default function Budget(props) {
+export default function Budget() {
   const [rowData, setRowData] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const [total, setTotal] = useState(0);
-  const addTodo = async (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const docRef = await addDoc(collection(db, "budgets"), {
-        rowData,
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
-  // const [isHasUser, setisHasUser] = useState(false);
+    //! set data Budget
+    const collectionRef = collection(db, "budgets");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const newDoc = await addDoc(collectionRef, {
+      title: e.target[0].value,
+      type: e.target[2].value,
+      amount: e.target[4].value,
+      category: e.target[6].value,
+    });
+
     setRowData([
       ...rowData,
       {
@@ -39,36 +44,67 @@ export default function Budget(props) {
         type: e.target[2].value,
         amount: e.target[4].value,
         category: e.target[6].value,
+        id: newDoc.id,
       },
     ]);
-
     e.target[0].value = "";
     e.target[2].value = "";
     e.target[4].value = "";
     e.target[6].value = "";
   };
-  const handleClick = (title) => {
+  const handleClick = async (rowObject) => {
+    //! delete from firebase
+    const rowRef = doc(db, "budgets", rowObject.id);
+    await deleteDoc(rowRef);
+
+    //! delete from state
     const updetedRows = rowData.filter((row) => {
-      return row.title !== title;
+      return row.title !== rowObject.title;
     });
+
     setRowData(updetedRows);
   };
-  const rows = rowData.map((row, index) => {
-    return <BudgetCard key={index} handleClick={handleClick} row={row} />;
-  });
+
+  const fetchBudgets = () => {
+    return onSnapshot(collection(db, "budgets"), (snapshot) => {
+      const rowsDataFireBase = snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+
+      setRowData(rowsDataFireBase);
+    });
+  };
 
   useEffect(() => {
     const sumWithInitial = rowData.reduce(
       (accumulator, currentValue) => accumulator + Number(currentValue.amount),
       0
     );
-    console.log(sumWithInitial);
+
     setTotal(sumWithInitial);
   }, [rowData]);
 
+  useEffect(() => {
+    //! get data
+    try {
+      onSnapshot(collection(db, "users"), (snapshot) => {
+        const users = snapshot.docs.map((doc) => {
+          return doc.data();
+        });
+
+        setUsers(users);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+  useEffect(() => {
+    fetchBudgets();
+  }, []);
+
   return (
     <div className="budgetIfState">
-      {props.user === null ? (
+      {users.length === 0 ? (
         <h1>not user connect</h1>
       ) : (
         <div className="budgetContainer">
@@ -116,7 +152,15 @@ export default function Budget(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows || false}
+                {rowData.map((row, index) => {
+                  return (
+                    <BudgetCard
+                      key={index}
+                      handleClick={handleClick}
+                      row={row}
+                    />
+                  );
+                })}
                 <TableRow className="rowCard">
                   <TableCell> total: {total}</TableCell>
                 </TableRow>

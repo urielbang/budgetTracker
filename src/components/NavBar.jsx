@@ -29,7 +29,7 @@ function NavBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
+            component="div"
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
