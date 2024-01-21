@@ -5,21 +5,24 @@ import Budget from "./pages/Budget";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-import { db } from "./config/fireBaseConfig.js";
-import { collection, onSnapshot } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
-  const [name, setName] = useState("");
+  const auth = getAuth();
+
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    //! get data
-    onSnapshot(collection(db, "users"), (snapshot) => {
-      const users = snapshot.docs.map((doc) => {
-        return doc.data();
-      });
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user);
+        setUser({ email: user.email, id: user.uid });
 
-      setUser(users);
+        const uid = user.uid;
+        // ...
+      } else {
+        setUser(null);
+      }
     });
   }, []);
 

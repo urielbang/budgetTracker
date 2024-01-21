@@ -16,28 +16,23 @@ function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [isSignIn, setIsSignIn] = useState(false);
 
+  //!click in Log in or log out
   const handleClick = () => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // setIsSignIn(false);
-        signOut(auth)
-          .then(() => {
-            console.log("Sign-out successful.");
-          })
-          .catch((error) => {
-            console.log("An error happened.");
-          });
-
-        const uid = user.uid;
-      } else {
-        // setIsSignIn(true);
-      }
-    });
+    if (isSignIn) {
+      signOut(auth)
+        .then(() => {
+          // Sign-out successful.
+        })
+        .catch((error) => {
+          // An error happened.
+        });
+    }
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  //! checking if has a user loged
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -52,8 +47,8 @@ function NavBar() {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+        <Toolbar className="navBar" disableGutters>
+          <AdbIcon sx={{ display: { md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -61,7 +56,7 @@ function NavBar() {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: "none", md: "flex" },
+              display: { md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".2rem",
@@ -72,7 +67,10 @@ function NavBar() {
             <Link to="/">Budget</Link>
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            className="buttonLinks"
+            sx={{ flexGrow: 1, display: { md: "flex" } }}
+          >
             {pages.map((page) => (
               <Button
                 key={page}
@@ -83,7 +81,17 @@ function NavBar() {
               </Button>
             ))}
           </Box>
-          <Typography onClick={handleClick} className="logOutBtn">
+          <Typography
+            onClick={handleClick}
+            className="logOutBtn"
+            sx={{
+              mr: 2,
+              display: { md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
             {isSignIn ? "log out" : "Login"}
           </Typography>
         </Toolbar>
