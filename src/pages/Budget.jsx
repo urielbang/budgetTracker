@@ -17,10 +17,13 @@ import {
   doc,
   onSnapshot,
 } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 
 export default function Budget() {
   const [rowData, setRowData] = useState([]);
   const [users, setUsers] = useState([]);
+  const [signIn, setSignIn] = useState(false);
 
   const [total, setTotal] = useState(0);
 
@@ -104,11 +107,20 @@ export default function Budget() {
   }, []);
   useEffect(() => {
     fetchBudgets();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user);
+        setSignIn(true);
+        const uid = user.uid;
+      } else {
+        setSignIn(false);
+      }
+    });
   }, []);
 
   return (
     <div className="budgetIfState">
-      {users.length === 0 ? (
+      {signIn === false ? (
         <h1>not user connect</h1>
       ) : (
         <div className="budgetContainer">

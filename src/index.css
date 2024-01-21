@@ -98,3 +98,6 @@ img {
 .loginContainer {
   margin-top: 2rem;
 }
+.logOutBtn {
+  cursor: pointer;
+}

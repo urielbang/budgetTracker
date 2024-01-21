@@ -2,24 +2,52 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-
 import Typography from "@mui/material/Typography";
-
 import Container from "@mui/material/Container";
-
 import Button from "@mui/material/Button";
-
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
-
-const pages = ["budget", "Login"];
+import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 function NavBar() {
+  const pages = ["budget", "Login"];
+  const auth = getAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [isSignIn, setIsSignIn] = useState(false);
+
+  const handleClick = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // setIsSignIn(false);
+        signOut(auth)
+          .then(() => {
+            console.log("Sign-out successful.");
+          })
+          .catch((error) => {
+            console.log("An error happened.");
+          });
+
+        const uid = user.uid;
+      } else {
+        // setIsSignIn(true);
+      }
+    });
+  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsSignIn(true);
+        const uid = user.uid;
+      } else {
+        setIsSignIn(false);
+      }
+    });
+  }, []);
 
   return (
     <AppBar position="static">
@@ -55,6 +83,9 @@ function NavBar() {
               </Button>
             ))}
           </Box>
+          <Typography onClick={handleClick} className="logOutBtn">
+            {isSignIn ? "log out" : "Login"}
+          </Typography>
         </Toolbar>
       </Container>
     </AppBar>
