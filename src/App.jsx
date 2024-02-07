@@ -1,5 +1,5 @@
 import NavBar from "./components/NavBar";
-import Main from "./components/Main.jsx";
+import HomePage from "./components/Main.jsx";
 import Auth from "./pages/Auth.jsx";
 import Budget from "./pages/Budget";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -31,7 +31,7 @@ function App() {
       <NavBar />
 
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/budget" element={<Budget user={user} />} />
         <Route path="/login" element={<Auth setUser={setUser} />} />
       </Routes>

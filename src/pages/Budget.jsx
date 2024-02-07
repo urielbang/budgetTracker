@@ -6,6 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TextField from "@mui/material/TextField";
 import BudgetCard from "../components/BudgetCard";
 import TableHead from "@mui/material/TableHead";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
@@ -22,7 +27,7 @@ const auth = getAuth();
 
 export default function Budget() {
   const [rowData, setRowData] = useState([]);
-  const [users, setUsers] = useState([]);
+
   const [signIn, setSignIn] = useState(false);
 
   const [total, setTotal] = useState(0);
@@ -90,21 +95,6 @@ export default function Budget() {
     setTotal(sumWithInitial);
   }, [rowData]);
 
-  //! fecth users to check how much users connected
-  useEffect(() => {
-    //! get data
-    try {
-      onSnapshot(collection(db, "users"), (snapshot) => {
-        const users = snapshot.docs.map((doc) => {
-          return doc.data();
-        });
-
-        setUsers(users);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
   useEffect(() => {
     fetchBudgets();
     onAuthStateChanged(auth, (user) => {
@@ -134,12 +124,20 @@ export default function Budget() {
               variant="outlined"
               name="title"
             />
-            <TextField
-              id="outlined-basic"
-              label="type"
-              variant="outlined"
-              name="type"
-            />
+
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">type</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Age"
+                >
+                  <MenuItem value={"Expend"}>Expend</MenuItem>
+                  <MenuItem value={"Income"}>Income</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
             <TextField
               id="outlined-basic"
               label="amount"
