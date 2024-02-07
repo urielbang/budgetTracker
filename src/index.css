@@ -112,7 +112,7 @@ img {
 .loginContainer {
   display: flex;
   align-items: center;
-  background-color: rgb(220, 242, 241);
+
   justify-content: center;
   min-height: 100vh;
 }
