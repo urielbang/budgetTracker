@@ -180,3 +180,25 @@ img {
   color: white;
   background-color: rgb(54, 84, 134);
 }
+.iconNavbar {
+  width: 2vw;
+  height: 5vh;
+  margin-right: 2rem;
+}
+.expend {
+  background-color: #ff4d4d;
+}
+.income {
+  background-color: #4dff4d;
+}
+
+#root td {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.total {
+  font-family: sans-serif;
+  font-weight: bold;
+  margin-left: 1rem;
+  font-size: 2rem;
+}

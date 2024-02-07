@@ -23,6 +23,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 const auth = getAuth();
 
 export default function Budget() {
@@ -32,7 +33,8 @@ export default function Budget() {
 
   const [total, setTotal] = useState(0);
 
-  const [isExpend, setIsexpends] = useState(false);
+  const [isExpend, setIsExpend] = useState(false);
+
   //! set budget data
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +42,11 @@ export default function Budget() {
     //! set data Budget
     const collectionRef = collection(db, "budgets");
 
+    if (e.target[2].value === "Expend") {
+      setIsExpend(true);
+    } else {
+      setIsExpend(false);
+    }
     const newDoc = await addDoc(collectionRef, {
       title: e.target[0].value,
       type: e.target[2].value,
@@ -58,7 +65,7 @@ export default function Budget() {
       },
     ]);
     e.target[0].value = "";
-    e.target[2].value = "";
+    e.target[2].defaultValue = "";
     e.target[4].value = "";
     e.target[6].value = "";
   };
@@ -88,10 +95,12 @@ export default function Budget() {
 
   //! total
   useEffect(() => {
-    const sumWithInitial = rowData.reduce(
-      (accumulator, currentValue) => accumulator + Number(currentValue.amount),
-      0
-    );
+    const sumWithInitial = rowData.reduce((accumulator, currentValue) => {
+      if (isExpend) {
+        return accumulator + Number(currentValue.amount);
+      }
+      return accumulator - Number(currentValue.amount);
+    }, 0);
 
     setTotal(sumWithInitial);
   }, [rowData]);
@@ -116,7 +125,7 @@ export default function Budget() {
       ) : (
         <div className="budgetContainer">
           <nav>
-            <h1 className="headeBudget">Budget tracker</h1>
+            <h1 className="headeBudget">Budget tracking</h1>
           </nav>
           <form onSubmit={handleSubmit} className="formSubmit">
             <TextField
@@ -176,12 +185,13 @@ export default function Budget() {
                     />
                   );
                 })}
-                <TableRow className="rowCard">
-                  <TableCell className="total"> total: {total}</TableCell>
-                </TableRow>
+                <TableRow className="rowCard"></TableRow>
               </TableBody>
             </Table>
           </TableContainer>
+          <hr />
+          <p className="total">total:{total}</p>
+          <hr />
         </div>
       )}
     </div>

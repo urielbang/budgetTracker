@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import AdbIcon from "@mui/icons-material/Adb";
+import img from "../assets/expense.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -48,7 +49,8 @@ function NavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar className="navBar" disableGutters>
-          <AdbIcon sx={{ display: { md: "flex" }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { md: "flex" }, mr: 1 }} /> */}
+          <img className="iconNavbar" src={img} alt="pic" />
           <Typography
             variant="h6"
             noWrap
