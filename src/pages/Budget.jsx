@@ -32,6 +32,7 @@ export default function Budget() {
 
   const [total, setTotal] = useState(0);
 
+  const [isExpend, setIsexpends] = useState(false);
   //! set budget data
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -176,7 +177,7 @@ export default function Budget() {
                   );
                 })}
                 <TableRow className="rowCard">
-                  <TableCell> total: {total}</TableCell>
+                  <TableCell className="total"> total: {total}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
