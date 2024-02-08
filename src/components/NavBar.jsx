@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import AdbIcon from "@mui/icons-material/Adb";
+import { RxHamburgerMenu } from "react-icons/rx";
+
 import img from "../assets/expense.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -38,7 +40,6 @@ function NavBar() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsSignIn(true);
-        const uid = user.uid;
       } else {
         setIsSignIn(false);
       }
@@ -49,7 +50,6 @@ function NavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar className="navBar" disableGutters>
-          {/* <AdbIcon sx={{ display: { md: "flex" }, mr: 1 }} /> */}
           <img className="iconNavbar" src={img} alt="pic" />
           <Typography
             variant="h6"
@@ -95,6 +95,18 @@ function NavBar() {
             }}
           >
             {isSignIn ? "log out" : "Login"}
+          </Typography>
+
+          <Typography
+            sx={{
+              mr: 2,
+              display: { md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            <RxHamburgerMenu className="hamburgerIcon" />
           </Typography>
         </Toolbar>
       </Container>

@@ -202,3 +202,37 @@ img {
   margin-left: 1rem;
   font-size: 2rem;
 }
+.hamburgerIcon {
+  display: none;
+}
+@media only screen and (max-width: 600px) {
+  .hamburgerIcon {
+    display: inline-block;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  header div {
+    display: none;
+    align-self: flex-end;
+  }
+  #root header {
+    display: flex;
+  }
+  .container-home-page {
+    width: 100vw;
+    height: 100vh;
+  }
+  .container-home-page .rigthHome h1 {
+    font-size: 10px;
+  }
+  .container-home-page .rigthHome P {
+    font-size: 10px;
+  }
+  .leftHome {
+    width: 50vw;
+    height: 100%;
+  }
+  .rigthHome {
+    margin: 0;
+  }
+}
