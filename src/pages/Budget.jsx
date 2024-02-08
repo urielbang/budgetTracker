@@ -95,12 +95,15 @@ export default function Budget() {
 
   //! total
   useEffect(() => {
-    const sumWithInitial = rowData.reduce((accumulator, currentValue) => {
-      if (isExpend) {
-        return accumulator + Number(currentValue.amount);
+    let sumWithInitial = 0;
+
+    rowData.forEach((row) => {
+      if (row.type === "Expend") {
+        sumWithInitial -= Number(row.amount);
+      } else {
+        sumWithInitial += Number(row.amount);
       }
-      return accumulator - Number(currentValue.amount);
-    }, 0);
+    });
 
     setTotal(sumWithInitial);
   }, [rowData]);
